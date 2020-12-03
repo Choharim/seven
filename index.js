@@ -6,10 +6,12 @@ const reset = document.querySelector(".reset");
 const equal = document.querySelector(".equal");
 
 let makeNumberArray = [];
+let elementNumberArray = [];
 let totalNumberArray = [];
 
 function resetAll(){
   makeNumberArray = [];
+  elementNumberArray = [];
   totalNumberArray = [];
   resultValue.innerText = "0";
 }
@@ -19,11 +21,33 @@ function plusEqualCalc(){
   if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
     return;
   }else {
-    totalNumberArray.push(number);
+    makeElementNumberArray();
+    if(elementNumberArray.some(notNumber)){
+      const str = elementNumberArray.join('');
+      const num = parseInt(str);
+      elementNumberArray.splice(0,elementNumberArray.length,num);
+    }
+    totalNumberArray.push(elementNumberArray[0]);
     makeNumberArray = [];
+    elementNumberArray = [];
     const accumul= totalNumberArray.reduce((result,current) => { return result + current ;});
     showInputNumber(accumul);
+    console.log(totalNumberArray);
   }
+}
+
+function notNumber(element){
+  return typeof element === "string";
+}
+
+function minusCalc(){
+  plusEqualCalc();
+  elementNumberArray.push("-");
+}
+
+function makeElementNumberArray(){
+  const number = inputNumber();
+  elementNumberArray.push(number);
 }
 
 function showInputNumber(number){
@@ -38,7 +62,7 @@ function inputNumber(number){
   const str_pressNumber = makeNumberArray.join('');
   const num_pressNumber = parseInt(str_pressNumber);
 
-  if(!isNaN(num_pressNumber)){
+  if(Number.isInteger(num_pressNumber)){
     showInputNumber(num_pressNumber); //makeNumberArray에 첫 숫자 0들어가면 없애서 display에 NaN뜸.
     return num_pressNumber
   }
@@ -55,4 +79,4 @@ numbers.forEach(number => {number.addEventListener("click",pressNumber)});
 plus.addEventListener("click",plusEqualCalc);
 equal.addEventListener("click",plusEqualCalc);
 reset.addEventListener("click",resetAll);
-
+minus.addEventListener("click",minusCalc);
