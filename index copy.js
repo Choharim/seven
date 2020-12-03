@@ -18,49 +18,65 @@ function resetAll(){
   resultValue.innerText = "0";
 }
 
-function isItMinus(element){
-  return element === "-";
+function makeMinusNumber(){
+  if(elementNumberArray.some(function(element){return element === "-";})){
+    const str = elementNumberArray.join('');
+    const num = parseInt(str);
+    elementNumberArray.splice(0,elementNumberArray.length,num);
+  }
 }
 
-function isItMultiDivi(element){
-  return (element === "*" || element === "/");
+function calcMutiDiviNumber(){
+  if(elementNumberArray.some(function(element){return (element === "*" || element === "/");})){
+    let numberOfDivi=0;
+    elementNumberArray.forEach(function(element){if(element === "/"){numberOfDivi++;} return numberOfDivi;}); // "/"개수찾기
+    for(let i=1; i <= numberOfDivi; i++){
+    const index = elementNumberArray.indexOf("/");
+    elementNumberArray.splice(index,1,"*");
+    elementNumberArray.splice(index+1,1,1/elementNumberArray[index+1]);
+    }// 앞에"/"있는 값은 역수로 바꾸기
+    const newElementNumberArray = elementNumberArray.filter(element => typeof element === "number"); // "*"모두 제거
+    const calcValue = newElementNumberArray.reduce((result,current) => { return result * current ;});
+    elementNumberArray.splice(0,elementNumberArray.length,calcValue); // 연속해서 나누고 곱한 수 하나의 수로 계산
+  }
 }
 
-function minusCalc(){
-  plusEqualCalc();
-  elementNumberArray.push("-");
-}
-
-function plusEqualCalc(){
+function equalCalc(){
   const number = inputNumber();
   
   if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
     return;
   }else {
     makeElementNumberArray(number);
-    if(elementNumberArray.some(isItMinus)){
-      const str = elementNumberArray.join('');
-      const num = parseInt(str);
-      elementNumberArray.splice(0,elementNumberArray.length,num);
-    }
-    if(elementNumberArray.some(isItMultiDivi)){
-      let numberOfDivi=0;
-      elementNumberArray.forEach(function(element){if(element === "/"){numberOfDivi++;} return numberOfDivi;}); // "/"개수찾기
-      for(let i=1; i <= numberOfDivi; i++){
-      const index = elementNumberArray.indexOf("/");
-      elementNumberArray.splice(index,1,"*");
-      elementNumberArray.splice(index+1,1,1/elementNumberArray[index+1]);
-      }// 앞에"/"있는 값은 역수로 바꾸기
-      const newElementNumberArray = elementNumberArray.filter(element => typeof element === "number"); // "*"모두 제거
-      const calcValue = newElementNumberArray.reduce((result,current) => { return result * current ;});
-      elementNumberArray.splice(0,elementNumberArray.length,calcValue); // 연속해서 나누고 곱한 수 하나의 수로 계산
-    }
+    makeMinusNumber();
+    calcMutiDiviNumber();
     totalNumberArray.push(elementNumberArray[0]);
     makeNumberArray = [];
     elementNumberArray = [];
     const accumul= totalNumberArray.reduce((result,current) => { return result + current ;});
     showInputNumber(accumul);
-    console.log(totalNumberArray);
+  }
+}
+
+function minusCalc(){
+  plusCalc();
+  elementNumberArray.push("-");
+}
+
+function plusCalc(){
+  const number = inputNumber();
+  
+  if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
+    return;
+  }else {
+    makeElementNumberArray(number);
+    makeMinusNumber();
+    calcMutiDiviNumber();
+    totalNumberArray.push(elementNumberArray[0]);
+    makeNumberArray = [];
+    elementNumberArray = [];
+    const accumul= totalNumberArray.reduce((result,current) => { return result + current ;});
+    showInputNumber(accumul);
   }
 }
 
@@ -71,11 +87,7 @@ function mutiCalc(){
     return;
   }else{
     makeElementNumberArray(number);
-    if(elementNumberArray.some(isItMinus)){
-      const str = elementNumberArray.join('');
-      const num = parseInt(str);
-      elementNumberArray.splice(0,elementNumberArray.length,num);
-    }
+    makeMinusNumber();
     elementNumberArray.push("*");
     makeNumberArray = [];
   }
@@ -88,11 +100,7 @@ function diviCalc(){
     return;
   }else{
     makeElementNumberArray(number);
-    if(elementNumberArray.some(isItMinus)){
-      const str = elementNumberArray.join('');
-      const num = parseInt(str);
-      elementNumberArray.splice(0,elementNumberArray.length,num);
-    }
+    makeMinusNumber();
     elementNumberArray.push("/");
     makeNumberArray = [];
   }
@@ -128,8 +136,8 @@ function pressNumber(event){
 
 
 numbers.forEach(number => {number.addEventListener("click",pressNumber)});
-plus.addEventListener("click",plusEqualCalc);
-equal.addEventListener("click",plusEqualCalc);
+plus.addEventListener("click",plusCalc);
+equal.addEventListener("click",equalCalc);
 reset.addEventListener("click",resetAll);
 minus.addEventListener("click",minusCalc);
 multi.addEventListener("click",mutiCalc);
