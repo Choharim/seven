@@ -51,10 +51,8 @@ function plusEqualCalc(){
       elementNumberArray.splice(index+1,1,1/elementNumberArray[index+1]);
       }// 앞에"/"있는 값은 역수로 바꾸기
       const newElementNumberArray = elementNumberArray.filter(element => typeof element === "number"); // "*"모두 제거
-      elementNumberArray = newElementNumberArray;
-
-
-      
+      const calcValue = newElementNumberArray.reduce((result,current) => { return result * current ;});
+      elementNumberArray.splice(0,elementNumberArray.length,calcValue);
     }
     totalNumberArray.push(elementNumberArray[0]);
     makeNumberArray = [];
@@ -147,6 +145,8 @@ a.splice(index+1,1,1/a[index+1]);
 }
 console.log(a);
 const w = a.filter(ele => typeof ele === "number");
-a = w;
-
-
+console.log(w);
+const elem = w.reduce(( result, current ) => result * current);
+console.log(elem);
+a.splice(0,a.length,elem);
+console.log(a);
