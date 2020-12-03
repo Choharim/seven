@@ -4,6 +4,8 @@ const plus = document.querySelector(".plus");
 const minus = document.querySelector(".minus");
 const reset = document.querySelector(".reset");
 const equal = document.querySelector(".equal");
+const multi = document.querySelector(".multiply");
+const divi = document.querySelector(".division");
 
 let makeNumberArray = [];
 let elementNumberArray = [];
@@ -16,13 +18,23 @@ function resetAll(){
   resultValue.innerText = "0";
 }
 
+function minusCalc(){
+  plusEqualCalc();
+  elementNumberArray.push("-");
+}
+
+function makeMinus(element){
+  return element === "-";
+}
+
+
 function plusEqualCalc(){
   const number = inputNumber();
   if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
     return;
   }else {
     makeElementNumberArray();
-    if(elementNumberArray.some(notNumber)){
+    if(elementNumberArray.some(makeMinus)){
       const str = elementNumberArray.join('');
       const num = parseInt(str);
       elementNumberArray.splice(0,elementNumberArray.length,num);
@@ -32,17 +44,39 @@ function plusEqualCalc(){
     elementNumberArray = [];
     const accumul= totalNumberArray.reduce((result,current) => { return result + current ;});
     showInputNumber(accumul);
-    console.log(totalNumberArray);
   }
 }
 
-function notNumber(element){
-  return typeof element === "string";
+function mutiCalc(){
+  const number = inputNumber();
+  if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
+    return;
+  }else{
+    makeElementNumberArray();
+    if(elementNumberArray.some(makeMinus)){
+      const str = elementNumberArray.join('');
+      const num = parseInt(str);
+      elementNumberArray.splice(0,elementNumberArray.length,num);
+    }
+    elementNumberArray.push("*");
+    makeNumberArray = [];
+  }
 }
 
-function minusCalc(){
-  plusEqualCalc();
-  elementNumberArray.push("-");
+function diviCalc(){
+  const number = inputNumber();
+  if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
+    return;
+  }else{
+    makeElementNumberArray();
+    if(elementNumberArray.some(makeMinus)){
+      const str = elementNumberArray.join('');
+      const num = parseInt(str);
+      elementNumberArray.splice(0,elementNumberArray.length,num);
+    }
+    elementNumberArray.push("/");
+    makeNumberArray = [];
+  }
 }
 
 function makeElementNumberArray(){
@@ -80,3 +114,8 @@ plus.addEventListener("click",plusEqualCalc);
 equal.addEventListener("click",plusEqualCalc);
 reset.addEventListener("click",resetAll);
 minus.addEventListener("click",minusCalc);
+multi.addEventListener("click",mutiCalc);
+divi.addEventListener("click",diviCalc);
+
+const a = [5 ,"*",2];
+
