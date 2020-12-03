@@ -32,11 +32,14 @@ function minusCalc(){
 }
 
 function plusEqualCalc(){
-  const number = inputNumber();
+  let number = inputNumber();
+  if(number === undefined && totalNumberArray !== null){// 계산 다 하고 = 누르고 나서 사칙연산 또 누를 때 
+    number = 0;
+   }
   if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
     return;
   }else {
-    makeElementNumberArray();
+    makeElementNumberArray(number);
     if(elementNumberArray.some(isItMinus)){
       const str = elementNumberArray.join('');
       const num = parseInt(str);
@@ -52,13 +55,14 @@ function plusEqualCalc(){
       }// 앞에"/"있는 값은 역수로 바꾸기
       const newElementNumberArray = elementNumberArray.filter(element => typeof element === "number"); // "*"모두 제거
       const calcValue = newElementNumberArray.reduce((result,current) => { return result * current ;});
-      elementNumberArray.splice(0,elementNumberArray.length,calcValue);
+      elementNumberArray.splice(0,elementNumberArray.length,calcValue); // 연속해서 나누고 곱한 수 하나의 수로 계산
     }
     totalNumberArray.push(elementNumberArray[0]);
     makeNumberArray = [];
     elementNumberArray = [];
     const accumul= totalNumberArray.reduce((result,current) => { return result + current ;});
     showInputNumber(accumul);
+    console.log(totalNumberArray);
   }
 }
 
@@ -67,7 +71,7 @@ function mutiCalc(){
   if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
     return;
   }else{
-    makeElementNumberArray();
+    makeElementNumberArray(number);
     if(elementNumberArray.some(isItMinus)){
       const str = elementNumberArray.join('');
       const num = parseInt(str);
@@ -83,7 +87,7 @@ function diviCalc(){
   if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
     return;
   }else{
-    makeElementNumberArray();
+    makeElementNumberArray(number);
     if(elementNumberArray.some(isItMinus)){
       const str = elementNumberArray.join('');
       const num = parseInt(str);
@@ -94,8 +98,7 @@ function diviCalc(){
   }
 }
 
-function makeElementNumberArray(){
-  const number = inputNumber();
+function makeElementNumberArray(number){
   elementNumberArray.push(number);
 }
 
@@ -131,22 +134,3 @@ reset.addEventListener("click",resetAll);
 minus.addEventListener("click",minusCalc);
 multi.addEventListener("click",mutiCalc);
 divi.addEventListener("click",diviCalc);
-
-///////////////
-let a = [-5 ,"*",2,"*",4,"/",5,"*",6,"/",7,"/",8];
-
-console.log(a);
-let n=0;
-a.forEach(function(ele){if(ele === "/"){ n++;} return n;});
-for(let b=1;b <= n;b++){
-  const index = a.indexOf("/");
-a.splice(index,1,"*");
-a.splice(index+1,1,1/a[index+1]);
-}
-console.log(a);
-const w = a.filter(ele => typeof ele === "number");
-console.log(w);
-const elem = w.reduce(( result, current ) => result * current);
-console.log(elem);
-a.splice(0,a.length,elem);
-console.log(a);
