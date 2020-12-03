@@ -5,13 +5,16 @@
 }
 
 html,
-body {
+body,
+.container {
   width: 100%;
   height: 100%;
 }
 
 .container {
-  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .result {
@@ -30,7 +33,8 @@ body {
   justify-content: center;
 }
 
-input {
+input,
+.none {
   width: 70px;
   margin: 5px;
 }
