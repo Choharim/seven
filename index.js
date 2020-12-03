@@ -18,15 +18,18 @@ function resetAll(){
   resultValue.innerText = "0";
 }
 
+function isItMinus(element){
+  return element === "-";
+}
+
+function isItMultiDivi(element){
+  return (element === "*" || element === "/");
+}
+
 function minusCalc(){
   plusEqualCalc();
   elementNumberArray.push("-");
 }
-
-function makeMinus(element){
-  return element === "-";
-}
-
 
 function plusEqualCalc(){
   const number = inputNumber();
@@ -34,10 +37,24 @@ function plusEqualCalc(){
     return;
   }else {
     makeElementNumberArray();
-    if(elementNumberArray.some(makeMinus)){
+    if(elementNumberArray.some(isItMinus)){
       const str = elementNumberArray.join('');
       const num = parseInt(str);
       elementNumberArray.splice(0,elementNumberArray.length,num);
+    }
+    if(elementNumberArray.some(isItMultiDivi)){
+      let numberOfDivi=0;
+      elementNumberArray.forEach(function(element){if(element === "/"){numberOfDivi++;} return numberOfDivi;}); // "/"개수찾기
+      for(let i=1; i <= numberOfDivi; i++){
+      const index = elementNumberArray.indexOf("/");
+      elementNumberArray.splice(index,1,"*");
+      elementNumberArray.splice(index+1,1,1/elementNumberArray[index+1]);
+      }// 앞에"/"있는 값은 역수로 바꾸기
+      const newElementNumberArray = elementNumberArray.filter(element => typeof element === "number"); // "*"모두 제거
+      elementNumberArray = newElementNumberArray;
+
+
+      
     }
     totalNumberArray.push(elementNumberArray[0]);
     makeNumberArray = [];
@@ -53,7 +70,7 @@ function mutiCalc(){
     return;
   }else{
     makeElementNumberArray();
-    if(elementNumberArray.some(makeMinus)){
+    if(elementNumberArray.some(isItMinus)){
       const str = elementNumberArray.join('');
       const num = parseInt(str);
       elementNumberArray.splice(0,elementNumberArray.length,num);
@@ -69,7 +86,7 @@ function diviCalc(){
     return;
   }else{
     makeElementNumberArray();
-    if(elementNumberArray.some(makeMinus)){
+    if(elementNumberArray.some(isItMinus)){
       const str = elementNumberArray.join('');
       const num = parseInt(str);
       elementNumberArray.splice(0,elementNumberArray.length,num);
@@ -117,5 +134,19 @@ minus.addEventListener("click",minusCalc);
 multi.addEventListener("click",mutiCalc);
 divi.addEventListener("click",diviCalc);
 
-const a = [5 ,"*",2];
+///////////////
+let a = [-5 ,"*",2,"*",4,"/",5,"*",6,"/",7,"/",8];
+
+console.log(a);
+let n=0;
+a.forEach(function(ele){if(ele === "/"){ n++;} return n;});
+for(let b=1;b <= n;b++){
+  const index = a.indexOf("/");
+a.splice(index,1,"*");
+a.splice(index+1,1,1/a[index+1]);
+}
+console.log(a);
+const w = a.filter(ele => typeof ele === "number");
+a = w;
+
 
