@@ -53,8 +53,10 @@ function equalCalc(){
     totalNumberArray.push(elementNumberArray[0]);
     makeNumberArray = [];
     elementNumberArray = [];
-    const accumul= totalNumberArray.reduce((result,current) => { return result + current ;});
+    const copyTotalNumberArray = [...totalNumberArray]; //new array
+    const accumul= copyTotalNumberArray.reduce((result,current) => { return result + current ;});
     showInputNumber(accumul);
+    totalNumberArray = []; //reset
   }
 }
 
@@ -65,7 +67,7 @@ function minusCalc(){
 
 function plusCalc(){
   const number = inputNumber();
-  
+
   if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
     return;
   }else {
@@ -77,6 +79,8 @@ function plusCalc(){
     elementNumberArray = [];
     const accumul= totalNumberArray.reduce((result,current) => { return result + current ;});
     showInputNumber(accumul);
+    console.log(elementNumberArray);
+    console.log(totalNumberArray);
   }
 }
 
@@ -89,24 +93,28 @@ function mutiCalc(){
     makeElementNumberArray(number);
     makeMinusNumber();
     calcMutiDiviNumber();
-    resultValue.innerText = `${elementNumberArray[0]}`;
+    resultValue.innerText = `${Math.abs(elementNumberArray[0])}`;
     elementNumberArray.push("*");
     makeNumberArray = [];
+    console.log(elementNumberArray);
+    console.log(totalNumberArray);
   }
 }
 
 function diviCalc(){
   const number = inputNumber();
-
+  
   if(number === undefined || isNaN(number) || number === 0){ //0누르고 equ눌렀거나 그냥 equ눌렀을 때 대비해서
     return;
   }else{
     makeElementNumberArray(number);
     makeMinusNumber();
     calcMutiDiviNumber();
-    resultValue.innerText = `${elementNumberArray[0]}`;
+    resultValue.innerText = `${Math.abs(elementNumberArray[0])}`;
     elementNumberArray.push("/");
     makeNumberArray = [];
+    console.log(elementNumberArray);
+    console.log(totalNumberArray);
   }
 }
 
