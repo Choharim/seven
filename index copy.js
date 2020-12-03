@@ -36,8 +36,8 @@ function calcMutiDiviNumber(){
     elementNumberArray.splice(index+1,1,1/elementNumberArray[index+1]);
     }// 앞에"/"있는 값은 역수로 바꾸기
     const newElementNumberArray = elementNumberArray.filter(element => typeof element === "number"); // "*"모두 제거
-    const calcValue = newElementNumberArray.reduce((result,current) => { return result * current ;});
-    elementNumberArray.splice(0,elementNumberArray.length,calcValue); // 연속해서 나누고 곱한 수 하나의 수로 계산
+    const calcValue = newElementNumberArray.reduce((result,current) => { return result * current ;}); // 연속해서 나누고 곱한 수 하나의 수로 계산
+    elementNumberArray.splice(0,elementNumberArray.length,calcValue); 
   }
 }
 
@@ -88,6 +88,8 @@ function mutiCalc(){
   }else{
     makeElementNumberArray(number);
     makeMinusNumber();
+    calcMutiDiviNumber();
+    resultValue.innerText = `${elementNumberArray[0]}`;
     elementNumberArray.push("*");
     makeNumberArray = [];
   }
@@ -101,6 +103,8 @@ function diviCalc(){
   }else{
     makeElementNumberArray(number);
     makeMinusNumber();
+    calcMutiDiviNumber();
+    resultValue.innerText = `${elementNumberArray[0]}`;
     elementNumberArray.push("/");
     makeNumberArray = [];
   }
